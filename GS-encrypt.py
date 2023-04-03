@@ -4,16 +4,16 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     @param `password:str` password to encrypt file
     @param `file_path:str` path of the file to encrypt
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting encrypted file as such
-    @return `:str` full password used for encrypting
+    @return `:str` actual password used for encrypting
     '''
     print(f"{file_path} decrypted")
 
 def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
-    @param `password:str` password to encrypt file
-    @param `file_path:str` path of the file to encrypt
-    @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting encrypted file as such
-    @return `:str` full password used for encrypting
+    @param `password:str` password to decrypt file
+    @param `file_path:str` path of the file to decrypt
+    @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
+    @return `:str` actual password used for decrypting
     '''
     print(f"{file_path} encrypt")   
 
