@@ -1,9 +1,21 @@
 import sys
-def gs_encrypt(password:str, file:str):
-    print(f"{file} decrypted")
+def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
+    '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
+    @param `password:str` password to encrypt file
+    @param `file_path:str` path of the file to encrypt
+    @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting encrypted file as such
+    @return `:str` full password used for encrypting
+    '''
+    print(f"{file_path} decrypted")
 
-def gs_decrypt(password:str, file:str):
-    print(f"{file} encrypt")   
+def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
+    '''Decrypt `file_path` with `password` with a new name `file_new_path`
+    @param `password:str` password to encrypt file
+    @param `file_path:str` path of the file to encrypt
+    @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting encrypted file as such
+    @return `:str` full password used for encrypting
+    '''
+    print(f"{file_path} encrypt")   
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
@@ -45,7 +57,7 @@ if __name__ == "__main__":
     
     # Pass result to calculator class
     if decrypt_q:
-        gs_decrypt(password, file)
+        gs_decrypt_file(password, file)
     else:
-        gs_encrypt(password, file)
+        gs_encrypt_file(password, file)
     
