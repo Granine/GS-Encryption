@@ -31,7 +31,7 @@ if __name__ == "__main__":
     pass_count:int = 0
     options:str = sys.argv[3:]
     for i, option in enumerate(options):
-        if pass_count:
+        if pass_count > 0:
             pass_count -= 1
             continue
         # decrypt option
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         # new name?
         elif "-s" in option:
             if "-" not in options[i + 1]:
-                pass_count = 1
+                pass_count += 1
                 search_location:str = options[i + 1]
                 # TODO file = search(file, search_location)
             else:
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         # new name?
         elif "-n" in option:
             if "-" not in options[i + 1]:
-                pass_count = 1
+                pass_count += 1
                 file_new_path:str = options[i + 1]
             else:
                 raise AttributeError("No name provided after -n")
