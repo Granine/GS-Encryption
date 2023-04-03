@@ -1,4 +1,5 @@
 import sys
+import os
 
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
@@ -7,8 +8,17 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting encrypted file as such
     @return `:str` actual password used for encrypting
     '''
-    print(f"{file_path} decrypted")
-    return password
+    with open(file_path, "rb") as f_original:
+        data = f_original.read()
+    #print (data)
+    print (bytes(data)[0:10])
+    print(f"{file_path} encrypted")
+    #sys.stdout.buffer.write(bytes(data))
+    #print(hex(123))
+    encrypted_data = gs_encrypt_data(password, data)
+    with open(file_new_path, "wb") as f_encrypted:
+        f_encrypted.write(encrypted_data[0])
+    return encrypted_data[1]
 
 def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
@@ -17,8 +27,24 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
     @return `:str` actual password used for decrypting
     '''
-    print(f"{file_path} encrypted")   
+    print(f"{file_path} decrypted")   
     return password
+
+def gs_encrypt_data(password:str, data)->bytes:
+    '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
+    @param `password:str` password to encrypt file
+    @param `data:` data to be encrypted
+    @return `:tuple of (bytes, str)` encrypted data and actual password used for decrypting
+    '''
+    return (data, password)
+
+def gs_decrypt_data(password:str, data:bytes)->bytes:
+    '''Decrypt `file_path` with `password` with a new name `file_new_path`
+    @param `password:str` password to decrypt file
+    @param `file_path:str` path of the file to decrypt
+    @return `:tuple of (bytes, str)` decrypted data and actual password used for decrypting
+    '''  
+    return (data, password)
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
@@ -26,7 +52,7 @@ if __name__ == "__main__":
         raise AttributeError("Number of argument under requirement, please read documentation")
     
     password:str = sys.argv[1]
-    file_path:str = sys.argv[2]
+    file_path:str = os.path.realpath(sys.argv[2])
     # TODO check path exsist
     # option tracking
     pass_count:int = 0
@@ -62,19 +88,38 @@ if __name__ == "__main__":
         else:
             raise AttributeError(f"Unknown option {option}")
     
+    # normalize file new path
     if not file_new_path:
-        #TODO properly parse last part of path
-        file_new_path = file_path + "_encrypted" + file_path
-        
+        # auto generate new path
+        file_new_path_pre = os.path.dirname(file_path) + "\\" + os.path.basename(file_path).split(".")[0]
+        file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
+        file_new_path =  f"{file_new_path_pre}_encrypted{file_new_path_type}"
+        base_index = 1
+        while os.path.exists(file_new_path):
+            file_new_path = f"{file_new_path_pre}_encrypted_{base_index}{file_new_path_type}"
+            base_index += 1
+    elif ":\\" not in file_new_path:
+        # if user provided only name
+        file_new_path_pre = os.path.dirname(file_path) + "\\"
+        file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
+        file_new_path =  f"{file_new_path_pre}{file_new_path}{file_new_path_type}"
+        if os.path.exists(file_new_path):
+            raise AttributeError(f"Save path already have file named {file_new_path}")
+    else:
+        # if user provided relative path, if bad path will error out here
+        file_new_path = os.path.realpath(file_new_path)
+        if os.path.exists(file_new_path):
+            raise AttributeError(f"Save path already have file named {file_new_path}")
         
     if verbose_q:
         print(f"""
-              Password: {password}
-              File_path: {file_path}
-              decrypt?: {decrypt_q}
-              verbose?: {verbose_q}
-              search?: {bool(search_location)}
-              file_new_path: {file_new_path}
+-------------Parameter------------------
+Password: {password}
+file_path: {file_path}
+decrypt?: {decrypt_q}
+verbose?: {verbose_q}
+file_new_path: {file_new_path}
+---------------------------------------
               """)
     
     # Pass result to calculator class
