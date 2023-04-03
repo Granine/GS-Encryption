@@ -1,4 +1,5 @@
 import sys
+
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
@@ -23,7 +24,7 @@ if __name__ == "__main__":
         raise AttributeError("Number of argument under requirement, please read documentation")
     
     password:str = sys.argv[1]
-    file:str = sys.argv[2]
+    file_path:str = sys.argv[2]
     # option tracking
     pass_count:int = 0
     options:str = sys.argv[3:]
@@ -49,15 +50,25 @@ if __name__ == "__main__":
         elif "-n" in option:
             if "-" not in options[i + 1]:
                 pass_count = 1
-                new_name:str = options[i + 1]
+                file_new_path:str = options[i + 1]
             else:
                 raise AttributeError("No name provided after -n")
         else:
             raise AttributeError(f"Unknown option {option}")
+        
+    if verbose_q:
+        print(f"""
+              Password: {password}
+              File_path: {file_path}
+              decrypt?: {decrypt_q}
+              verbose?: {verbose_q}
+              search?: {bool(search_location)}
+              file_new_path: {file_new_path}
+              """)
     
     # Pass result to calculator class
     if decrypt_q:
-        gs_decrypt_file(password, file)
+        gs_decrypt_file(password, file_path, file_new_path)
     else:
-        gs_encrypt_file(password, file)
+        gs_encrypt_file(password, file_path, file_new_path)
     
