@@ -8,6 +8,7 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     @return `:str` actual password used for encrypting
     '''
     print(f"{file_path} decrypted")
+    return password
 
 def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
@@ -16,7 +17,8 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
     @return `:str` actual password used for decrypting
     '''
-    print(f"{file_path} encrypt")   
+    print(f"{file_path} encrypted")   
+    return password
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
@@ -68,7 +70,8 @@ if __name__ == "__main__":
     
     # Pass result to calculator class
     if decrypt_q:
-        gs_decrypt_file(password, file_path, file_new_path)
+        password = gs_decrypt_file(password, file_path, file_new_path)
     else:
-        gs_encrypt_file(password, file_path, file_new_path)
+        password = gs_encrypt_file(password, file_path, file_new_path)
+    print(f"Your full password for this task is {password}")
     
