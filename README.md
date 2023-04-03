@@ -19,3 +19,5 @@ Future:
 - Signature of encryptor version in encrypted file
 - feedback on encryption strength
 - generate password
+- test
+- validation method to make sure file is decryptable
