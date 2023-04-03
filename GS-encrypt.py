@@ -27,36 +27,45 @@ if __name__ == "__main__":
     
     password:str = sys.argv[1]
     file_path:str = sys.argv[2]
+    # TODO check path exsist
     # option tracking
     pass_count:int = 0
     options:str = sys.argv[3:]
+    # default value
+    decrypt_q:bool = False
+    verbose_q:bool = False
+    search_location:str = "."
+    file_new_path:str = "" # given default value XXX_encrypted.XXX later
     for i, option in enumerate(options):
         if pass_count > 0:
             pass_count -= 1
             continue
         # decrypt option
         if "-d" in option:
-            decrypt_q:bool = True
+            decrypt_q = True
         # verbose?
         elif "-v" in option:
-            verbose_q:bool = True
+            verbose_q = True
         # new name?
         elif "-s" in option:
             if "-" not in options[i + 1]:
                 pass_count += 1
-                search_location:str = options[i + 1]
-                # TODO file = search(file, search_location)
-            else:
-                raise AttributeError("No name provided after -n")
+                search_location = options[i + 1]
+            # TODO file = search(file, search_location)
         # new name?
         elif "-n" in option:
             if "-" not in options[i + 1]:
                 pass_count += 1
-                file_new_path:str = options[i + 1]
+                file_new_path = options[i + 1]
             else:
                 raise AttributeError("No name provided after -n")
         else:
             raise AttributeError(f"Unknown option {option}")
+    
+    if not file_new_path:
+        #TODO properly parse last part of path
+        file_new_path = file_path + "_encrypted" + file_path
+        
         
     if verbose_q:
         print(f"""
