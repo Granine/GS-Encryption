@@ -36,6 +36,7 @@ def gs_encrypt_data(password:str, data)->bytes:
     @param `data:` data to be encrypted
     @return `:tuple of (bytes, str)` encrypted data and actual password used for decrypting
     '''
+    data = _shift_data_location(data, 1, "r")
     return (data, password)
 
 def gs_decrypt_data(password:str, data:bytes)->bytes:
@@ -45,6 +46,24 @@ def gs_decrypt_data(password:str, data:bytes)->bytes:
     @return `:tuple of (bytes, str)` decrypted data and actual password used for decrypting
     '''  
     return (data, password)
+
+def _shift_data_location(data:bytes, shift_count:int, direction:str):
+    ''' Shift hex location left or right with wrapping
+    '''
+    if direction.lower() == "r":
+        last_bytes = data[-shift_count:]
+        output_bytes = bytearray()
+        output_bytes.append(last_bytes)
+        output_bytes.extend(data[:-shift_count])
+    elif direction.lower() == "l":
+        first_bytes = data[-shift_count:]
+        output_bytes = bytearray()
+        output_bytes.append(first_bytes)
+        output_bytes.extend(data[:-shift_count])
+    else:
+        raise Exception("Unknown direction")
+    return output_bytes
+    
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
