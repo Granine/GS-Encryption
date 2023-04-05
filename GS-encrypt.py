@@ -33,7 +33,7 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
 def gs_encrypt_data(password:str, data)->bytes:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
-    @param `data:` data to be encrypted
+    @param `data:bytes` (or any type that can be converted to bytes) data to be encrypted ()
     @return `:tuple of (bytes, str)` encrypted data and actual password used for decrypting
     '''
     data = _shift_data_location(data, 1, "r")
@@ -42,7 +42,7 @@ def gs_encrypt_data(password:str, data)->bytes:
 def gs_decrypt_data(password:str, data:bytes)->bytes:
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
     @param `password:str` password to decrypt file
-    @param `file_path:str` path of the file to decrypt
+    @param `data:bytes` data to be decrypted
     @return `:tuple of (bytes, str)` decrypted data and actual password used for decrypting
     '''  
     return (data, password)
@@ -56,10 +56,10 @@ def _shift_data_location(data:bytes, shift_count:int, direction:str):
         output_bytes.append(last_bytes)
         output_bytes.extend(data[:-shift_count])
     elif direction.lower() == "l":
-        first_bytes = data[-shift_count:]
+        first_bytes = data[:shift_count]
         output_bytes = bytearray()
+        output_bytes.extend(data[shift_count:])
         output_bytes.append(first_bytes)
-        output_bytes.extend(data[:-shift_count])
     else:
         raise Exception("Unknown direction")
     return output_bytes
@@ -132,7 +132,7 @@ if __name__ == "__main__":
         
     if verbose_q:
         print(f"""
--------------Parameter------------------
+-------------Parameters------------------
 Password: {password}
 file_path: {file_path}
 decrypt?: {decrypt_q}
