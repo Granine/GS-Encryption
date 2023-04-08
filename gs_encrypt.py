@@ -47,23 +47,29 @@ def gs_decrypt_data(password:str, data:bytes)->bytes:
     '''  
     return (data, password)
 
-def _shift_data_location(data:bytes, shift_count:int, direction:str):
+def _shift_data_location(data:bytearray, shift_count:int, direction:str):
     ''' Shift hex location left or right with wrapping
     '''
     if direction.lower() == "r":
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
-        output_bytes.append(last_bytes)
+        output_bytes.extend(last_bytes)
         output_bytes.extend(data[:-shift_count])
     elif direction.lower() == "l":
         first_bytes = data[:shift_count]
         output_bytes = bytearray()
         output_bytes.extend(data[shift_count:])
-        output_bytes.append(first_bytes)
+        output_bytes.extend(first_bytes)
     else:
         raise Exception("Unknown direction")
     return output_bytes
-    
+
+def _swap_data_location(data:bytes, index_1, index_2, swap_length=1):
+    if index_1 < 0 or index_1+swap_length >= len(data) or index_2 < 0 or index_2+swap_length >= len(data):
+        raise Exception("Invalid index")
+    data[index_1:index_1+swap_length], data[index_2+swap_length] = data[index_2+swap_length], data[index_1:index_1+swap_length]
+    return ''.join(data)
+
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
