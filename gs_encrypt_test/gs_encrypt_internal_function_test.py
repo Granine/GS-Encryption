@@ -1,6 +1,7 @@
 import sys
 sys.path.append(f"{__file__}/../..")
 import gs_encrypt as encrypter
+import copy
 
 ''' Information:
 Note for data in each test is hard coded as translated results are hand calculated

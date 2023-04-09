@@ -1,8 +1,11 @@
 import sys
 import os
-#TODO mode for array manipulation versus return new array
 import copy
 
+'''
+TODO: mode for array manipulation versus return new array
+TODO: consider collecting like function and place in seperate file (maybe as a function)
+'''
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
@@ -12,6 +15,7 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''
     with open(file_path, "rb") as f_original:
         data = f_original.read()
+    #WIP
     #print (data)
     print (bytes(data)[0:10])
     print(f"{file_path} encrypted")
@@ -29,6 +33,7 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
     @return `:str` actual password used for decrypting
     '''
+    #WIP
     print(f"{file_path} decrypted")   
     return password
 
@@ -38,6 +43,7 @@ def gs_encrypt_data(password:str, data)->bytes:
     @param `data:bytes` (or any type that can be converted to bytes) data to be encrypted ()
     @return `:tuple of (bytes, str)` encrypted data and actual password used for decrypting
     '''
+    #WIP
     data = _shift_data_location(data, 1, "r")
     return (data, password)
 
@@ -47,6 +53,7 @@ def gs_decrypt_data(password:str, data:bytes)->bytes:
     @param `data:bytes` data to be decrypted
     @return `:tuple of (bytes, str)` decrypted data and actual password used for decrypting
     '''  
+    #WIP
     return (data, password)
 
 def _shift_data_location(data:bytearray, shift_count:int, direction:str):
