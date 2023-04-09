@@ -59,6 +59,9 @@ def gs_decrypt_data(password:str, data:bytes)->tuple:
 def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
     '''
+    '''
+    TODO: if shift count is over a cycle, handle properly
+    '''
     data = copy.deepcopy(data)
     if direction.lower() == "r":
         last_bytes = data[-shift_count:]
@@ -78,7 +81,7 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     ''' Swap the data of size swap_length(bytes) between index_1 and index_2
     '''
     data = copy.deepcopy(data)
-    if index_1 < 0 or index_1+swap_length >= len(data) or index_2 < 0 or index_2+swap_length >= len(data):
+    if index_1 < 0 or (index_1+swap_length) >= len(data) or index_2 < 0 or (index_2+swap_length) >= len(data):
         raise Exception("Invalid index")
     
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
@@ -91,6 +94,8 @@ def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:
     example: (bytes:"123456", 0, 4, 2) -> (563412)
     '''
     data = copy.deepcopy(data)
+    if index_from < 0 or index_from > index_to or index_to > len(data) or chunk_size > (index_to-index_from):
+        raise Exception("Invalid index")
     #wip
     return data
 
