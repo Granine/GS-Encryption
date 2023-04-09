@@ -40,7 +40,7 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str="")->str:
 def gs_encrypt_data(password:str, data)->tuple:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
-    @param `data:bytes` (or any type that can be converted to bytes) data to be encrypted ()
+    @param `data:bytes or bytearray` (or any type that can be converted to bytes) data to be encrypted ()
     @return `:tuple of (bytes, str)` encrypted data and actual password used for decrypting
     '''
     #WIP
@@ -50,7 +50,7 @@ def gs_encrypt_data(password:str, data)->tuple:
 def gs_decrypt_data(password:str, data:bytes)->tuple:
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
     @param `password:str` password to decrypt file
-    @param `data:bytes` data to be decrypted
+    @param `data:bytes or bytearray` data to be decrypted
     @return `:tuple of (bytes, str)` decrypted data and actual password used for decrypting
     '''  
     #WIP
