@@ -6,7 +6,8 @@ import copy
 TODO: mode for array manipulation versus return new array
 TODO: consider collecting like function and place in seperate file (maybe as a function)
 '''
-def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
+
+def gs_encrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
     @param `file_path:str` path of the file to encrypt
@@ -25,7 +26,7 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
         f_encrypted.write(encrypted_data[0])
     return encrypted_data[1]
 
-def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
+def gs_decrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
     @param `password:str` password to decrypt file
     @param `file_path:str` path of the file to decrypt
@@ -36,7 +37,7 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str=""):
     print(f"{file_path} decrypted")   
     return password
 
-def gs_encrypt_data(password:str, data)->bytes:
+def gs_encrypt_data(password:str, data)->tuple:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
     @param `data:bytes` (or any type that can be converted to bytes) data to be encrypted ()
@@ -46,7 +47,7 @@ def gs_encrypt_data(password:str, data)->bytes:
     data = _shift_data_location(data, 1, "r")
     return (data, password)
 
-def gs_decrypt_data(password:str, data:bytes)->bytes:
+def gs_decrypt_data(password:str, data:bytes)->tuple:
     '''Decrypt `file_path` with `password` with a new name `file_new_path`
     @param `password:str` password to decrypt file
     @param `data:bytes` data to be decrypted
@@ -55,7 +56,7 @@ def gs_decrypt_data(password:str, data:bytes)->bytes:
     #WIP
     return (data, password)
 
-def _shift_data_location(data:bytearray, shift_count:int, direction:str):
+def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
     '''
     data = copy.deepcopy(data)
@@ -73,14 +74,16 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str):
         raise Exception("Unknown direction")
     return output_bytes
 
-def _swap_data_location(data:bytearray, index_1, index_2, swap_length=1):
+def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)->bytearray:
+    ''' Swap the data of size swap_length(bytes) between index_1 and index_2
+    '''
     data = copy.deepcopy(data)
     if index_1 < 0 or index_1+swap_length >= len(data) or index_2 < 0 or index_2+swap_length >= len(data):
         raise Exception("Invalid index")
-    print(str(data[index_2:index_2+swap_length])+ "="+str( data[index_1:index_1+swap_length]))
+    
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
+    
     return data
-
 
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
