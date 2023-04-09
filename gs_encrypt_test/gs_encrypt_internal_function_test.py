@@ -37,5 +37,6 @@ def test_swap_data_location():
     assert encrypter._swap_data_location(raw_data, 0, 0).decode() == "12345"
     assert encrypter._swap_data_location(raw_data, 0, 3, 0).decode() == "12345"
     assert encrypter._swap_data_location(raw_data, 0, 1).decode() == "21345"
+    assert encrypter._swap_data_location(raw_data, 1, 0).decode() == "21345"
     assert encrypter._swap_data_location(raw_data, 0, 2, 2).decode() == "34125"
     
