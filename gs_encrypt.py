@@ -20,7 +20,6 @@ def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     print (bytes(data)[0:10])
     print(f"{file_path} encrypted")
     #sys.stdout.buffer.write(bytes(data))
-    #print(hex(123))
     encrypted_data = gs_encrypt_data(password, data)
     with open(file_new_path, "wb") as f_encrypted:
         f_encrypted.write(encrypted_data[0])
