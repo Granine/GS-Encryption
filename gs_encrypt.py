@@ -85,6 +85,15 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     
     return data
 
+def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:int=1)->bytearray:
+    ''' invert the data from index_from to index_to with chunksize per invert
+    
+    example: (bytes:"123456", 0, 4, 2) -> (563412)
+    '''
+    data = copy.deepcopy(data)
+    #wip
+    return data
+
 if __name__ == "__main__":
     # Checking python parameter when file is directly provoked
     if len(sys.argv) <= 2:
