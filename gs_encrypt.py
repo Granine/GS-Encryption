@@ -1,5 +1,7 @@
 import sys
 import os
+#TODO mode for array manipulation versus return new array
+import copy
 
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str=""):
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
@@ -50,6 +52,7 @@ def gs_decrypt_data(password:str, data:bytes)->bytes:
 def _shift_data_location(data:bytearray, shift_count:int, direction:str):
     ''' Shift hex location left or right with wrapping
     '''
+    data = copy.deepcopy(data)
     if direction.lower() == "r":
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
@@ -64,11 +67,13 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str):
         raise Exception("Unknown direction")
     return output_bytes
 
-def _swap_data_location(data:bytes, index_1, index_2, swap_length=1):
+def _swap_data_location(data:bytearray, index_1, index_2, swap_length=1):
+    data = copy.deepcopy(data)
     if index_1 < 0 or index_1+swap_length >= len(data) or index_2 < 0 or index_2+swap_length >= len(data):
         raise Exception("Invalid index")
-    data[index_1:index_1+swap_length], data[index_2+swap_length] = data[index_2+swap_length], data[index_1:index_1+swap_length]
-    return ''.join(data)
+    print(str(data[index_2:index_2+swap_length])+ "="+str( data[index_1:index_1+swap_length]))
+    data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
+    return data
 
 
 if __name__ == "__main__":
