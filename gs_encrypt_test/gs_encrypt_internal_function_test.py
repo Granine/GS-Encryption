@@ -2,9 +2,14 @@ import sys
 sys.path.append(f"{__file__}/../..")
 import gs_encrypt as encrypter
 
+''' Information:
+Note for data in each test is hard coded as translated results are hand calculated
+One should not fetch data other ways (like fixture) as it will cause calculated correct solution be to off
+TODO:
+- Test input array is not modified in function
+'''
 def test_shift_data_location_right():
     '''basic tests for _shift_data_location for shifting right
-    data is hard coded as shifted results are hand calculated
     '''
     data = "12345"
     raw_data = str.encode(data)
@@ -15,7 +20,6 @@ def test_shift_data_location_right():
     
 def test_shift_data_location_left():
     '''basic tests for _shift_data_location for shifting left
-    data is hard coded as shifted results are hand calculated
     '''
     data = "12345"
     raw_data = str.encode(data)
@@ -24,7 +28,7 @@ def test_shift_data_location_left():
     assert encrypter._shift_data_location(raw_data, 5, "l").decode() == "12345"
     
 def test_swap_data_location():
-    '''basic tests for _swap_data_location for shifting right
+    '''basic tests for _swap_data_location
     WIP:
     need to test size above limit
     need to test fail case (index out of bound)
