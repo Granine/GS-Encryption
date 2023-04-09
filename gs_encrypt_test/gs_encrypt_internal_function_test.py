@@ -18,6 +18,7 @@ def test_shift_data_location_right():
     assert encrypter._shift_data_location(raw_data, 0, "r").decode() == "12345"
     assert encrypter._shift_data_location(raw_data, 1, "r").decode() == "51234"
     assert encrypter._shift_data_location(raw_data, 5, "r").decode() == "12345"
+    assert encrypter._shift_data_location(raw_data, 6, "r").decode() == "51234"
     
 def test_shift_data_location_left():
     '''basic tests for _shift_data_location for shifting left
@@ -25,8 +26,9 @@ def test_shift_data_location_left():
     data = "12345"
     raw_data = str.encode(data)
     assert encrypter._shift_data_location(raw_data, 0, "l").decode() == "12345"
-    assert encrypter._shift_data_location(raw_data, 1, "l").decode() == "23451"
+    assert encrypter._shift_data_location(raw_data, 3, "l").decode() == "45123"
     assert encrypter._shift_data_location(raw_data, 5, "l").decode() == "12345"
+    assert encrypter._shift_data_location(raw_data, 6, "r").decode() == "23451"
     
 def test_swap_data_location():
     '''basic tests for _swap_data_location
