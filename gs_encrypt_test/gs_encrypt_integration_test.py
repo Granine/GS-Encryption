@@ -10,3 +10,20 @@ d = TemporaryDirectory()
 temp_file_name = os.path.join(d.name, 'name.txt')
 with open(temp_file_name) as t:
     t.write("abc")
+    
+def test_encrypt_file():
+    '''basic tests for encrypting a file
+    '''
+    data = "12345"
+    password = 12345
+    raw_data = str.encode(data)
+    raw_data = bytearray(raw_data)
+    assert encrypter.gs_encrypt_file(password, raw_data).decode() != "12345"
+def test_decrypt_file():
+    '''basic tests for encrypting a file
+    '''
+    data = "12345"
+    password = 12345
+    raw_data = str.encode(data)
+    raw_data = bytearray(raw_data)
+    assert encrypter.gs_encrypt_file(raw_data, 0, "r").decode() != "12345"
