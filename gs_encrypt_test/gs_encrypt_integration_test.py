@@ -8,7 +8,7 @@ import gs_encrypt as encrypter
 # in some test:
 d = TemporaryDirectory()
 temp_file_name = os.path.join(d.name, 'name.txt')
-with open(temp_file_name) as t:
+with open(temp_file_name, "w") as t:
     t.write("abc")
     
 def test_encrypt_file():
