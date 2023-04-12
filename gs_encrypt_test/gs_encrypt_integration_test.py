@@ -7,9 +7,12 @@ import gs_encrypt as encrypter
 
 # in some test:
 d = TemporaryDirectory()
-temp_file_name = os.path.join(d.name, 'name.txt')
+temp_file_name = os.path.join(d.name, 'name1.txt')
+print(d)
 with open(temp_file_name, "w") as t:
-    t.write("abc")
+    t.write("abc-")
+s = input()
+d.cleanup()
     
 def test_encrypt_file():
     '''basic tests for encrypting a file
@@ -22,6 +25,7 @@ def test_encrypt_file():
     
 def test_decrypt_file():
     '''basic tests for encrypting a file
+    WIP
     '''
     data = "12345"
     password = 12345
@@ -31,6 +35,7 @@ def test_decrypt_file():
 
 def test_encrypt_data():
     '''basic tests for encrypting raw byte data
+    WIP
     '''
     data = "12345"
     password = 12345
