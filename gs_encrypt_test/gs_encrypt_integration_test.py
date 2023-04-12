@@ -19,6 +19,7 @@ def test_encrypt_file():
     raw_data = str.encode(data)
     raw_data = bytearray(raw_data)
     assert encrypter.gs_encrypt_file(password, raw_data).decode() != "12345"
+    
 def test_decrypt_file():
     '''basic tests for encrypting a file
     '''
@@ -26,4 +27,22 @@ def test_decrypt_file():
     password = 12345
     raw_data = str.encode(data)
     raw_data = bytearray(raw_data)
-    assert encrypter.gs_encrypt_file(raw_data, 0, "r").decode() != "12345"
+    assert encrypter.gs_decrypt_file(raw_data, 0, "r").decode() != "12345"
+
+def test_encrypt_data():
+    '''basic tests for encrypting raw byte data
+    '''
+    data = "12345"
+    password = 12345
+    raw_data = str.encode(data)
+    raw_data = bytearray(raw_data)
+    assert encrypter.gs_encrypt_data(password, raw_data).decode() != "12345"
+    
+def test_decrypt_data():
+    '''basic tests for decrypting raw byte data
+    '''
+    data = "12345"
+    password = 12345
+    raw_data = str.encode(data)
+    raw_data = bytearray(raw_data)
+    assert encrypter.gs_decrypt_data(password, raw_data).decode() != "12345"
