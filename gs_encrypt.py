@@ -107,9 +107,10 @@ if __name__ == "__main__":
     password:str = sys.argv[1]
     file_path:str = os.path.realpath(sys.argv[2])
     # TODO check path exsist
-    # option tracking
+    # commandline option tracking
     pass_count:int = 0
     options:str = sys.argv[3:]
+    
     # default value
     decrypt_q:bool = False
     verbose_q:bool = False
@@ -141,9 +142,9 @@ if __name__ == "__main__":
         else:
             raise AttributeError(f"Unknown option {option}")
     
-    # normalize file new path
+    # init default file_new_path if -n option not set
     if not file_new_path:
-        # auto generate new path
+        # user provided nothing: auto generate new path
         file_new_path_pre = os.path.dirname(file_path) + "\\" + os.path.basename(file_path).split(".")[0]
         file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
         file_new_path =  f"{file_new_path_pre}_encrypted{file_new_path_type}"
@@ -152,14 +153,14 @@ if __name__ == "__main__":
             file_new_path = f"{file_new_path_pre}_encrypted_{base_index}{file_new_path_type}"
             base_index += 1
     elif ":\\" not in file_new_path:
-        # if user provided only name
+        # if user provided only name: add to same location as source file
         file_new_path_pre = os.path.dirname(file_path) + "\\"
         file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
         file_new_path =  f"{file_new_path_pre}{file_new_path}{file_new_path_type}"
         if os.path.exists(file_new_path):
             raise AttributeError(f"Save path already have file named {file_new_path}")
     else:
-        # if user provided relative path, if bad path will error out here
+        # if user provided path already have a file, error out here
         file_new_path = os.path.realpath(file_new_path)
         if os.path.exists(file_new_path):
             raise AttributeError(f"Save path already have file named {file_new_path}")
@@ -175,7 +176,7 @@ file_new_path: {file_new_path}
 ---------------------------------------
               """)
     
-    # Pass result to calculator class
+    # start encrypt or decryption
     if decrypt_q:
         password = gs_decrypt_file(password, file_path, file_new_path)
     else:

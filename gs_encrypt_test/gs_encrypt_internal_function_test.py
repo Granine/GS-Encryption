@@ -3,7 +3,6 @@ import copy
 sys.path.append(f"{__file__}/../..")
 import gs_encrypt as encrypter
 
-
 ''' Information:
 Note for data in each test is hard coded as translated results are hand calculated
 One should not fetch data other ways (like fixture) as it will cause calculated correct solution be to off
