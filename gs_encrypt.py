@@ -1,10 +1,12 @@
 import sys
 import os
 import copy
+import random # random password generation
+import secrets
 
 '''
 TODO: mode for array manipulation versus return new array
-TODO: consider collecting like function and place in seperate file (maybe as a function)
+TODO: consider collecting like function and place in separate file (maybe as a function)
 '''
 
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str="")->str:
@@ -100,11 +102,34 @@ def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:
     return data
 
 if __name__ == "__main__":
+    ''' Command line request format
+    path_to_this_file  password    file_path     [options]
+    password can be any string, if random password is desired, pass in -r at password location
+    '''
     # Checking python parameter when file is directly provoked
     if len(sys.argv) <= 2:
         raise AttributeError("Number of argument under requirement, please read documentation")
-    
     password:str = sys.argv[1]
+    if password == "-r":
+        password_length = random.randrange(1, 100)
+        password:str = ""
+        for index in range (password_length):
+            random_byte_number = random.randrange(1, 4)
+            random_byte_number = 1
+            #TODO
+            # generate utf-8 bytes
+            if random_byte_number == 1:
+                random_bits = bin(secrets.randbits(7))[2:]
+                print(random_bits)
+                # clean up
+                random_bits = "0" * (8 - len(random_bits)) + random_bits
+                print(random_bits)
+                random_char = chr(int(random_bits, 2))
+                print("--"+chr(int("1111111", 2)))
+            print(random_char)
+            password += random_char
+        print (password)
+    exit()
     file_path:str = os.path.realpath(sys.argv[2])
     # TODO check path exsist
     # commandline option tracking
@@ -149,6 +174,7 @@ if __name__ == "__main__":
         file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
         file_new_path =  f"{file_new_path_pre}_encrypted{file_new_path_type}"
         base_index = 1
+        # While file exist, keep adding index to base name until the file name cannot be found at destination
         while os.path.exists(file_new_path):
             file_new_path = f"{file_new_path_pre}_encrypted_{base_index}{file_new_path_type}"
             base_index += 1
@@ -157,6 +183,7 @@ if __name__ == "__main__":
         file_new_path_pre = os.path.dirname(file_path) + "\\"
         file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
         file_new_path =  f"{file_new_path_pre}{file_new_path}{file_new_path_type}"
+        # if user provided path already have a file, error out here
         if os.path.exists(file_new_path):
             raise AttributeError(f"Save path already have file named {file_new_path}")
     else:
