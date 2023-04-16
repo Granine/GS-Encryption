@@ -101,6 +101,21 @@ def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:
     #wip
     return data
 
+def random_unicode_char():
+    '''Generate a random unicode char, securely, attempt to remove non-printable chars
+    Note this function if not efficient as not all unicode is printable, and such value must be iterated out
+    '''
+    #0x10FFFF
+    max_unicode = 0x1fbff
+    
+    while True:
+        random_value = secrets.randbelow(max_unicode + 1)
+        print(random_value)
+        char = chr(random_value)
+        
+        if char.isprintable():
+            return char
+
 if __name__ == "__main__":
     ''' Command line request format
     path_to_this_file  password    file_path     [options]
@@ -114,22 +129,11 @@ if __name__ == "__main__":
         password_length = random.randrange(1, 100)
         password:str = ""
         for index in range (password_length):
-            random_byte_number = random.randrange(1, 4)
-            random_byte_number = 1
-            #TODO
+            #TODO: some char cannot be printed
             # generate utf-8 bytes
-            if random_byte_number == 1:
-                random_bits = bin(secrets.randbits(7))[2:]
-                print(random_bits)
-                # clean up
-                random_bits = "0" * (8 - len(random_bits)) + random_bits
-                print(random_bits)
-                random_char = chr(int(random_bits, 2))
-                print("--"+chr(int("1111111", 2)))
-            print(random_char)
+            random_char =  random_unicode_char()
             password += random_char
-        print (password)
-    exit()
+        print(password)
     file_path:str = os.path.realpath(sys.argv[2])
     # TODO check path exsist
     # commandline option tracking
