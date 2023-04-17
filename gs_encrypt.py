@@ -101,18 +101,20 @@ def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:
     #wip
     return data
 
-def random_unicode_char():
+def random_unicode_char(max_unicode:int=0x1fbff):
     '''Generate a random unicode char, securely, attempt to remove non-printable chars
     Note this function if not efficient as not all unicode is printable, and such value must be iterated out
     '''
-    # 0x10FFFF = Max range
-    max_unicode = 0x1fbff
+    # 0x10FFFF = Max unicode range
+    if max_unicode > 0x10FFFF:
+        raise AttributeError("max_unicode exceeded allowed unicode size (<=0x10FFFF)")
+    elif max_unicode <= :
+        raise AttributeError("max_unicode cannot be <= 0")
     
     # iterate until a char that can be printed is generated
     while True:
-        random_value = secrets.randbelow(max_unicode + 1)
+        random_value = secrets.randbelow(max_unicode + 1) # above 0
         char = chr(random_value)
-        
         if char.isprintable():
             return char
 
