@@ -101,9 +101,11 @@ def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:
     #wip
     return data
 
-def random_unicode_char(max_unicode:int=0x1fbff):
-    '''Generate a random unicode char, securely, attempt to remove non-printable chars
+def random_unicode_char(max_unicode:int=0x1fbff)->str:
+    '''Generate a random unicode character, securely. Will attempt to remove non-printable chars
     Note this function if not efficient as not all unicode is printable, and such value must be iterated out
+    @param `max_unicode:int` the highest unicode number that the output can reach (>0x0, <=0x10FFFF)
+    @return `:str` of size one
     '''
     # 0x10FFFF = Max unicode range
     if max_unicode > 0x10FFFF:
