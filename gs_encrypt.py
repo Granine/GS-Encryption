@@ -108,7 +108,7 @@ def random_unicode_char(max_unicode:int=0x1fbff):
     # 0x10FFFF = Max unicode range
     if max_unicode > 0x10FFFF:
         raise AttributeError("max_unicode exceeded allowed unicode size (<=0x10FFFF)")
-    elif max_unicode <= :
+    elif max_unicode <= 0:
         raise AttributeError("max_unicode cannot be <= 0")
     
     # iterate until a char that can be printed is generated
