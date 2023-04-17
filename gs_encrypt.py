@@ -105,12 +105,12 @@ def random_unicode_char():
     '''Generate a random unicode char, securely, attempt to remove non-printable chars
     Note this function if not efficient as not all unicode is printable, and such value must be iterated out
     '''
-    #0x10FFFF
+    # 0x10FFFF = Max range
     max_unicode = 0x1fbff
     
+    # iterate until a char that can be printed is generated
     while True:
         random_value = secrets.randbelow(max_unicode + 1)
-        print(random_value)
         char = chr(random_value)
         
         if char.isprintable():
@@ -129,13 +129,11 @@ if __name__ == "__main__":
         password_length = random.randrange(1, 100)
         password:str = ""
         for index in range (password_length):
-            #TODO: some char cannot be printed
             # generate utf-8 bytes
             random_char =  random_unicode_char()
             password += random_char
         print(password)
     file_path:str = os.path.realpath(sys.argv[2])
-    # TODO check path exsist
     # commandline option tracking
     pass_count:int = 0
     options:str = sys.argv[3:]
