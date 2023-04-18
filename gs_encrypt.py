@@ -122,8 +122,8 @@ def random_unicode_char(max_unicode:int=0x1fbff)->str:
 
 if __name__ == "__main__":
     ''' Command line request format
-    path_to_this_file  password    file_path     [options]
-    password can be any string, if random password is desired, pass in -r at password location
+    path_to_this_file   password   file_path   [options]
+    password can be any string, if random password is desired, pass in -r at password location (random unicode combination), or -rs for ASCII password
     '''
     # Checking python parameter when file is directly provoked
     if len(sys.argv) <= 2:
