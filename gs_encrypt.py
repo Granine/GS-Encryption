@@ -116,6 +116,7 @@ def random_unicode_char(max_unicode:int=0x1fbff)->str:
     # iterate until a char that can be printed is generated
     while True:
         random_value = secrets.randbelow(max_unicode + 1) # above 0
+        print(random_value)
         char = chr(random_value)
         if char.isprintable():
             return char
@@ -123,28 +124,34 @@ def random_unicode_char(max_unicode:int=0x1fbff)->str:
 if __name__ == "__main__":
     ''' Command line request format
     path_to_this_file   password   file_path   [options]
-    password can be any string, if random password is desired, pass in -r at password location (random unicode combination), or -rs for ASCII password
+    password can be any string, if random password is desired, pass in -r at password location (random unicode combination), or -rn for ASCII password
     '''
     # Checking python parameter when file is directly provoked
     if len(sys.argv) <= 2:
         raise AttributeError("Number of argument under requirement, please read documentation")
     password:str = sys.argv[1]
     if password == "-r":
-        password_length = random.randrange(1, 100)
+        password_length = random.randrange(5, 30)
         password:str = ""
         for index in range (password_length):
             # generate utf-8 bytes
             random_char =  random_unicode_char()
             password += random_char
-        print(password)
+    elif password == "-rn":
+        password_length = random.randrange(10, 60)
+        password:str = ""
+        for index in range (password_length):
+            # generate utf-8 bytes
+            random_char =  random_unicode_char(127)
+            password += random_char
     file_path:str = os.path.realpath(sys.argv[2])
     # commandline option tracking
     pass_count:int = 0
     options:str = sys.argv[3:]
     
     # default value
-    decrypt_q:bool = False
-    verbose_q:bool = False
+    decrypt_option:bool = False
+    verbose_option:bool = False
     search_location:str = "."
     file_new_path:str = "" # given default value XXX_encrypted.XXX later
     for i, option in enumerate(options):
@@ -153,10 +160,10 @@ if __name__ == "__main__":
             continue
         # decrypt option
         if "-d" in option:
-            decrypt_q = True
+            decrypt_option = True
         # verbose?
         elif "-v" in option:
-            verbose_q = True
+            verbose_option = True
         # new name?
         elif "-s" in option:
             if "-" not in options[i + 1]:
@@ -177,7 +184,7 @@ if __name__ == "__main__":
     if not file_new_path:
         # user provided nothing: auto generate new path
         file_new_path_pre = os.path.dirname(file_path) + "\\" + os.path.basename(file_path).split(".")[0]
-        file_new_path_type = "." + os.path.basename(file_path).split(".")[1] 
+        file_new_path_type = "." + os.path.basename(file_path).split(".")[1] if "." in file_path else ""
         file_new_path =  f"{file_new_path_pre}_encrypted{file_new_path_type}"
         base_index = 1
         # While file exist, keep adding index to base name until the file name cannot be found at destination
@@ -198,19 +205,19 @@ if __name__ == "__main__":
         if os.path.exists(file_new_path):
             raise AttributeError(f"Save path already have file named {file_new_path}")
         
-    if verbose_q:
+    if verbose_option:
         print(f"""
 -------------Parameters------------------
 Password: {password}
 file_path: {file_path}
-decrypt?: {decrypt_q}
-verbose?: {verbose_q}
+decrypt?: {decrypt_option}
+verbose?: {verbose_option}
 file_new_path: {file_new_path}
 ---------------------------------------
               """)
     
     # start encrypt or decryption
-    if decrypt_q:
+    if decrypt_option:
         password = gs_decrypt_file(password, file_path, file_new_path)
     else:
         password = gs_encrypt_file(password, file_path, file_new_path)
