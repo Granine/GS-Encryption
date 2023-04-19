@@ -118,7 +118,8 @@ def random_unicode_char(max_unicode:int=0x1fbff)->str:
         random_value = secrets.randbelow(max_unicode + 1) # above 0
         print(random_value)
         char = chr(random_value)
-        if char.isprintable():
+        # a valid character and non-space
+        if char.isprintable() and char != " ":
             return char
 
 if __name__ == "__main__":
@@ -132,17 +133,17 @@ if __name__ == "__main__":
     password:str = sys.argv[1]
     if password == "-r":
         password_length = random.randrange(5, 30)
-        password:str = ""
+        password = ""
         for index in range (password_length):
             # generate utf-8 bytes
-            random_char =  random_unicode_char()
+            random_char = random_unicode_char()
             password += random_char
     elif password == "-rn":
         password_length = random.randrange(10, 60)
-        password:str = ""
+        password = ""
         for index in range (password_length):
-            # generate utf-8 bytes
-            random_char =  random_unicode_char(127)
+            # generate ascII bytes
+            random_char = random_unicode_char(127)
             password += random_char
     file_path:str = os.path.realpath(sys.argv[2])
     # commandline option tracking
