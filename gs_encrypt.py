@@ -68,7 +68,6 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytear
     # handle shift_count > data size
     shift_count = shift_count % len(data)
     if direction.lower() == "r":
-        
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
         output_bytes.extend(last_bytes)
@@ -86,8 +85,10 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     ''' Swap the data of size swap_length(bytes) between index_1 and index_2
     '''
     data = copy.deepcopy(data)
-    if index_1 < 0 or (index_1+swap_length) >= len(data) or index_2 < 0 or (index_2+swap_length) >= len(data):
-        raise Exception("Invalid index")
+    index_1 = index_1 % len(data)
+    index_2 = index_2 % len(data)
+    # TODO calc max length to end, calc max distanc
+    swap_length = swap_length % len(data)
     
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
     
