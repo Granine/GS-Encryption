@@ -58,14 +58,17 @@ def gs_decrypt_data(password:str, data:bytes)->tuple:
     #WIP
     return (data, password)
 
+# ========================= Worker Functions ==========================
+# TODO need to add boundary bounce instead of oversize
+
 def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
     '''
-    '''
-    TODO: if shift count is over a cycle, handle properly
-    '''
     data = copy.deepcopy(data)
+    # handle shift_count > data size
+    shift_count = shift_count % len(data)
     if direction.lower() == "r":
+        
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
         output_bytes.extend(last_bytes)

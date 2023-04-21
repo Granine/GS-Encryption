@@ -6,12 +6,12 @@ sys.path.append(f"{__file__}/../..")
 import gs_encrypt as encrypter
 
 # in some test:
+#TODO sample for temporary file
 d = TemporaryDirectory()
 temp_file_name = os.path.join(d.name, 'name1.txt')
 print(d)
 with open(temp_file_name, "w") as t:
     t.write("abc-")
-s = input()
 d.cleanup()
     
 def test_encrypt_file():

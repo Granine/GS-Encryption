@@ -28,11 +28,11 @@ def test_shift_data_location_left():
     assert encrypter._shift_data_location(raw_data, 0, "l").decode() == "12345"
     assert encrypter._shift_data_location(raw_data, 3, "l").decode() == "45123"
     assert encrypter._shift_data_location(raw_data, 5, "l").decode() == "12345"
-    assert encrypter._shift_data_location(raw_data, 6, "r").decode() == "23451"
+    assert encrypter._shift_data_location(raw_data, 6, "l").decode() == "23451"
     
 def test_swap_data_location():
     '''basic tests for _swap_data_location
-    WIP:
+    TODO
     need to test size above limit
     need to test fail case (index out of bound)
     need to test case where wrapping happen
@@ -47,3 +47,17 @@ def test_swap_data_location():
     assert encrypter._swap_data_location(raw_data, 1, 0).decode() == "21345"
     assert encrypter._swap_data_location(raw_data, 0, 2, 2).decode() == "34125"
     
+def test_invert_data_order():
+    '''basic tests for _invert_data_order()
+    '''
+    data = "12345"
+    raw_data = str.encode(data)
+    raw_data = bytearray(raw_data)
+    assert encrypter._invert_data_order(raw_data, 0, 4).decode() == "54321"
+    assert encrypter._invert_data_order(raw_data, 1, 3).decode() == "14325"
+    assert encrypter._invert_data_order(raw_data, 4, 0).decode() == "54321"
+    assert encrypter._invert_data_order(raw_data, 0, 4, 2).decode() == "34125"
+    assert encrypter._invert_data_order(raw_data, 0, 4, 5).decode() == "12345"
+    assert encrypter._invert_data_order(raw_data, 0, 4, 6).decode() == "54321"
+    assert encrypter._invert_data_order(raw_data, 0, 6, 1).decode() == "32145"
+    assert encrypter._invert_data_order(raw_data, 0, 9, 1).decode() == "21345"
