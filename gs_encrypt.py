@@ -88,7 +88,10 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     index_1 = index_1 % len(data)
     index_2 = index_2 % len(data)
     # TODO calc max length to end, calc max distanc
-    swap_length = swap_length % len(data)
+    dis_to_end = min(len(data) - index_1, len(data) - index_2)
+    dis_between = abs(index_1 - index_2)
+    max_allowed_dis = min(dis_to_end, dis_between)
+    swap_length = swap_length % (max_allowed_dis) if max_allowed_dis != 0 else 0
     
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
     
