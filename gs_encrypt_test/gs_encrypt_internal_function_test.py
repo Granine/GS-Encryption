@@ -44,12 +44,13 @@ def test_swap_data_location():
     assert encrypter._swap_data_location(raw_data, 0, 1).decode() == "21345"
     assert encrypter._swap_data_location(raw_data, 1, 0).decode() == "21345"
     assert encrypter._swap_data_location(raw_data, 0, 2, 2).decode() == "34125"
-    assert encrypter._swap_data_location(raw_data, 0, 2, 3).decode() == "32145"
-    assert encrypter._swap_data_location(raw_data, 0, 4, 2).decode() == "42341"
-    assert encrypter._swap_data_location(raw_data, 0, 3, 3).decode() == "42315"
-    assert encrypter._swap_data_location(raw_data, 0, 7).decode() == "21345"
-    assert encrypter._swap_data_location(raw_data, 0, 9).decode() == "21345"
-    assert encrypter._swap_data_location(raw_data, 0, 2, ).decode() == "21345"
+    assert encrypter._swap_data_location(raw_data, 0, 2, 3).decode() == "12345"
+    assert encrypter._swap_data_location(raw_data, 0, 2, 4).decode() == "32145"
+    assert encrypter._swap_data_location(raw_data, 0, 4, 3).decode() == "52341"
+    assert encrypter._swap_data_location(raw_data, 0, 3, 3).decode() == "12345"
+    assert encrypter._swap_data_location(raw_data, 0, 7).decode() == "32145"
+    assert encrypter._swap_data_location(raw_data, 0, 11).decode() == "21345"
+    assert encrypter._swap_data_location(raw_data, 11, 0).decode() == "21345"
     
 def test_invert_data_order():
     '''basic tests for _invert_data_order()
