@@ -8,6 +8,7 @@ Note for data in each test is hard coded as translated results are hand calculat
 One should not fetch data other ways (like fixture) as it will cause calculated correct solution be to off
 TODO:
 - Test input array is not modified in function
+- TEst reversible
 '''
 def test_shift_data_location_right():
     '''basic tests for _shift_data_location for shifting right
@@ -32,8 +33,6 @@ def test_shift_data_location_left():
     
 def test_swap_data_location():
     '''basic tests for _swap_data_location
-    TODO
-    need to test fail case (index out of bound)
     '''
     data = "12345"
     raw_data = str.encode(data)
