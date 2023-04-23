@@ -1,7 +1,12 @@
 # GS-Encryption
-A Good and Simple Encryption algorism that take {File} + {Custom Password} = {Encrypted File}
+A Good and Simple Encryption algorism that encrypt and decrypts any file or data based on a user defined or randomly generated password
 # WIP
-### Version
+## Usage Direction
+### Powershell
+`
+python3 gs_encrypt.py
+`
+# Version
 0.0.0: Function WIP
 ### Plans
 0.0.1:
