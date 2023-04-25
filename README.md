@@ -3,8 +3,9 @@ A Good and Simple Encryption algorism that encrypt and decrypts any file or data
 # WIP
 ## Usage Direction
 ### Powershell
+To run encrypter:
 `
-python3 gs_encrypt.py
+python3 gs_encrypt.py [password] [target file] [*options]
 `
 # Version
 0.0.0: Function WIP
