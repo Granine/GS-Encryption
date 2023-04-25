@@ -90,35 +90,36 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     dis_to_end = min(len(data) - index_1, len(data) - index_2)
     dis_between = abs(index_1 - index_2)
     max_allowed_dis = min(dis_to_end, dis_between)
-    # 000
-    # 100
-    # 010
-    # 111
-    # 121
-    # 211
-    # 131
-    # 230 -> 200
-    # 311
-    # 322
-    # 333
-    # 340 ->300
-    # 241 - > 210
     swap_length = min(max_allowed_dis, (swap_length % (max_allowed_dis + 1))) if max_allowed_dis != 0 else 0
     
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
     
     return data
 
-def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:int=1)->bytearray:
+def _invert_data_order(data:bytearray, index_1:int, index_2:int, chunk_size:int=1)->bytearray:
     ''' invert the data from index_from to index_to with chunksize per invert
     
     example: (bytes:"123456", 0, 4, 2) -> (563412)
     '''
-    data = copy.deepcopy(data)
-    if index_from < 0 or index_from > index_to or index_to > len(data) or chunk_size > (index_to-index_from):
-        raise Exception("Invalid index")
-    #wip
-    return data
+    chunk_group = []
+    data_out = bytearray()
+    temp = bytearray()
+    index_1 = index_1 % len(data)
+    index_2 = index_2 % len(data)
+    index_1, index_2 = min(index_1, index_2), max(index_1, index_2)
+    max_allowed_dis = abs(index_1 - index_2)
+    chunk_size = min(max_allowed_dis, (chunk_size % (max_allowed_dis + 1))) if max_allowed_dis != 0 else 0
+    for i in range(index_1, index_2+1):
+        temp.append(data[i])
+        if chunk_size and ((i + 1) % chunk_size == 0):
+            chunk_group.append(temp)
+            temp = bytearray()
+    chunk_group.reverse()
+    for chunk in chunk_group:
+        data_out += chunk
+    if temp:
+        data_out+=(temp)
+    return data[:index_1] + data_out + data[index_2+1:]
 
 def random_unicode_char(max_unicode:int=0x1fbff)->str:
     '''Generate a random unicode character, securely. Will attempt to remove non-printable chars
