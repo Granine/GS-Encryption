@@ -8,7 +8,8 @@ Note for data in each test is hard coded as translated results are hand calculat
 One should not fetch data other ways (like fixture) as it will cause calculated correct solution be to off
 TODO:
 - Test input array is not modified in function
-- TEst reversible
+- Test reversible
+- Test negative
 '''
 def test_shift_data_location_right():
     '''basic tests for _shift_data_location for shifting right

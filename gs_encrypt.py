@@ -4,9 +4,10 @@ import copy
 import random # random password generation
 import secrets
 
-'''
+''' The main encrypter and helper functions
 TODO: mode for array manipulation versus return new array
 TODO: consider collecting like function and place in separate file (maybe as a function)
+TODO: handle negative input
 '''
 
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str="")->str:
@@ -81,8 +82,13 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytear
         raise Exception("Unknown direction")
     return output_bytes
 
-def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)->bytearray:
-    ''' Swap the data of size swap_length(bytes) between index_1 and index_2
+def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length:int=1)->bytearray:
+    ''' invert the data from index_from to index_to with chunksize per invert
+    @param `data:bytearray` data to invert
+    @param `index_1:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `index_2:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `swap_length:int` length of data unit to swap, if chunk if larger than data length, wrap to zero. If two swap area overlap, will wrap as well
+    @return `:bytearray` the array with order swapped 
     '''
     data = copy.deepcopy(data)
     index_1 = index_1 % len(data)
@@ -98,7 +104,11 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
 
 def _invert_data_order(data:bytearray, index_1:int, index_2:int, chunk_size:int=1)->bytearray:
     ''' invert the data from index_from to index_to with chunksize per invert
-    
+    @param `data:bytearray` data to invert
+    @param `index_1:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `index_2:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `chunk_size:int` the size of the "chunk" swap is down, if chunk if larger than data length, wrap to zero
+    @return `:bytearray` the array with order swapped 
     example: (bytes:"123456", 0, 4, 2) -> (563412)
     '''
     chunk_group = []
