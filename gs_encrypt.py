@@ -60,20 +60,24 @@ def gs_decrypt_data(password:str, data:bytes)->tuple:
     return (data, password)
 
 # ========================= Worker Functions ==========================
-# TODO need to add boundary bounce instead of oversize
 
 def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
+    @param `data:bytearray` data to shift
+    @param `shift_count:int` Number of space to shift
+    @param `direction:str` [0] = "l" for left, [1] = "r" for right
+    @param `swap_length:int` length of data unit to swap, if chunk if larger than data length, wrap to zero. If two swap area overlap, will wrap as well
+    @return `:bytearray` the data location shifted 
     '''
     data = copy.deepcopy(data)
     # handle shift_count > data size
     shift_count = shift_count % len(data)
-    if direction.lower() == "r":
+    if direction.lower()[0] == "r":
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
         output_bytes.extend(last_bytes)
         output_bytes.extend(data[:-shift_count])
-    elif direction.lower() == "l":
+    elif direction.lower()[1] == "l":
         first_bytes = data[:shift_count]
         output_bytes = bytearray()
         output_bytes.extend(data[shift_count:])
@@ -84,7 +88,7 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytear
 
 def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length:int=1)->bytearray:
     ''' invert the data from index_from to index_to with chunksize per invert
-    @param `data:bytearray` data to invert
+    @param `data:bytearray` data to swap location of 
     @param `index_1:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
     @param `index_2:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
     @param `swap_length:int` length of data unit to swap, if chunk if larger than data length, wrap to zero. If two swap area overlap, will wrap as well
