@@ -69,6 +69,11 @@ def gs_decrypt_data(password:str, data:bytes)->tuple:
     return (data, password)
 
 # ========================= Worker Functions ==========================
+def _decode_password(password:str)->str:
+    decoded_password = ""
+    for char in password:
+        decoded_password += ord(char)
+    return decoded_password
 
 def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
