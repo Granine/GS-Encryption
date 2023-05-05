@@ -10,6 +10,8 @@ TODO: consider collecting like function and place in separate file (maybe as a f
 TODO: handle negative input
 '''
 
+
+
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
     @param `password:str` password to encrypt file
@@ -36,9 +38,16 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
     @return `:str` actual password used for decrypting
     '''
+    with open(file_path, "rb") as f_original:
+        data = f_original.read()
     #WIP
-    print(f"{file_path} decrypted")   
-    return password
+    #print (data)
+    print(bytes(data)[0:10])
+    print(f"{file_path} encrypted")
+    decrypted_data = gs_decrypt_data(password, data)
+    with open(file_new_path, "wb") as f_decrypted:
+        f_decrypted.write(decrypted_data[0])
+    return decrypted_data[1]
 
 def gs_encrypt_data(password:str, data)->tuple:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
