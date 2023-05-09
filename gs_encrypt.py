@@ -4,10 +4,13 @@ import copy
 import random # random password generation
 import secrets
 
-'''
+''' The main encrypter and helper functions
 TODO: mode for array manipulation versus return new array
 TODO: consider collecting like function and place in separate file (maybe as a function)
+TODO: handle negative input
 '''
+
+
 
 def gs_encrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
@@ -35,9 +38,16 @@ def gs_decrypt_file(password:str, file_path:str, file_new_path:str="")->str:
     @param `file_new_path:str` is a path is provide, save to new location, if only name is provided, name the resulting decrypted file as such
     @return `:str` actual password used for decrypting
     '''
+    with open(file_path, "rb") as f_original:
+        data = f_original.read()
     #WIP
-    print(f"{file_path} decrypted")   
-    return password
+    #print (data)
+    print(bytes(data)[0:10])
+    print(f"{file_path} encrypted")
+    decrypted_data = gs_decrypt_data(password, data)
+    with open(file_new_path, "wb") as f_decrypted:
+        f_decrypted.write(decrypted_data[0])
+    return decrypted_data[1]
 
 def gs_encrypt_data(password:str, data)->tuple:
     '''Encrypt `file_path` with `password` with a new name `file_new_path` or auto generate one
@@ -59,20 +69,29 @@ def gs_decrypt_data(password:str, data:bytes)->tuple:
     return (data, password)
 
 # ========================= Worker Functions ==========================
-# TODO need to add boundary bounce instead of oversize
+def _decode_password(password:str)->str:
+    decoded_password = ""
+    for char in password:
+        decoded_password += ord(char)
+    return decoded_password
 
 def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytearray:
     ''' Shift hex location left or right with wrapping
+    @param `data:bytearray` data to shift
+    @param `shift_count:int` Number of space to shift
+    @param `direction:str` [0] = "l" for left, [1] = "r" for right
+    @param `swap_length:int` length of data unit to swap, if chunk if larger than data length, wrap to zero. If two swap area overlap, will wrap as well
+    @return `:bytearray` the data location shifted 
     '''
     data = copy.deepcopy(data)
     # handle shift_count > data size
     shift_count = shift_count % len(data)
-    if direction.lower() == "r":
+    if direction.lower()[0] == "r":
         last_bytes = data[-shift_count:]
         output_bytes = bytearray()
         output_bytes.extend(last_bytes)
         output_bytes.extend(data[:-shift_count])
-    elif direction.lower() == "l":
+    elif direction.lower()[1] == "l":
         first_bytes = data[:shift_count]
         output_bytes = bytearray()
         output_bytes.extend(data[shift_count:])
@@ -81,8 +100,13 @@ def _shift_data_location(data:bytearray, shift_count:int, direction:str)->bytear
         raise Exception("Unknown direction")
     return output_bytes
 
-def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)->bytearray:
-    ''' Swap the data of size swap_length(bytes) between index_1 and index_2
+def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length:int=1)->bytearray:
+    ''' invert the data from index_from to index_to with chunksize per invert
+    @param `data:bytearray` data to swap location of 
+    @param `index_1:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `index_2:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `swap_length:int` length of data unit to swap, if chunk if larger than data length, wrap to zero. If two swap area overlap, will wrap as well
+    @return `:bytearray` the array with order swapped 
     '''
     data = copy.deepcopy(data)
     index_1 = index_1 % len(data)
@@ -90,35 +114,40 @@ def _swap_data_location(data:bytearray, index_1:int, index_2:int, swap_length=1)
     dis_to_end = min(len(data) - index_1, len(data) - index_2)
     dis_between = abs(index_1 - index_2)
     max_allowed_dis = min(dis_to_end, dis_between)
-    # 000
-    # 100
-    # 010
-    # 111
-    # 121
-    # 211
-    # 131
-    # 230 -> 200
-    # 311
-    # 322
-    # 333
-    # 340 ->300
-    # 241 - > 210
     swap_length = min(max_allowed_dis, (swap_length % (max_allowed_dis + 1))) if max_allowed_dis != 0 else 0
     
     data[index_1:index_1+swap_length], data[index_2:index_2+swap_length] = data[index_2:index_2+swap_length], data[index_1:index_1+swap_length]
     
     return data
 
-def _invert_data_order(data:bytearray, index_from:int, index_to:int, chunk_size:int=1)->bytearray:
+def _invert_data_order(data:bytearray, index_1:int, index_2:int, chunk_size:int=1)->bytearray:
     ''' invert the data from index_from to index_to with chunksize per invert
-    
+    @param `data:bytearray` data to invert
+    @param `index_1:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `index_2:int` index marking one end of the swap length. any integer, even if negative or larger than chunk size (will wrap and count from index 0 again)
+    @param `chunk_size:int` the size of the "chunk" swap is down, if chunk if larger than data length, wrap to zero
+    @return `:bytearray` the array with order swapped 
     example: (bytes:"123456", 0, 4, 2) -> (563412)
     '''
-    data = copy.deepcopy(data)
-    if index_from < 0 or index_from > index_to or index_to > len(data) or chunk_size > (index_to-index_from):
-        raise Exception("Invalid index")
-    #wip
-    return data
+    chunk_group = []
+    data_out = bytearray()
+    temp = bytearray()
+    index_1 = index_1 % len(data)
+    index_2 = index_2 % len(data)
+    index_1, index_2 = min(index_1, index_2), max(index_1, index_2)
+    max_allowed_dis = abs(index_1 - index_2)
+    chunk_size = min(max_allowed_dis, (chunk_size % (max_allowed_dis + 1))) if max_allowed_dis != 0 else 0
+    for i in range(index_1, index_2+1):
+        temp.append(data[i])
+        if chunk_size and ((i + 1) % chunk_size == 0):
+            chunk_group.append(temp)
+            temp = bytearray()
+    chunk_group.reverse()
+    for chunk in chunk_group:
+        data_out += chunk
+    if temp:
+        data_out+=(temp)
+    return data[:index_1] + data_out + data[index_2+1:]
 
 def random_unicode_char(max_unicode:int=0x1fbff)->str:
     '''Generate a random unicode character, securely. Will attempt to remove non-printable chars

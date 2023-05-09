@@ -8,6 +8,8 @@ Note for data in each test is hard coded as translated results are hand calculat
 One should not fetch data other ways (like fixture) as it will cause calculated correct solution be to off
 TODO:
 - Test input array is not modified in function
+- Test reversible
+- Test negative
 '''
 def test_shift_data_location_right():
     '''basic tests for _shift_data_location for shifting right
@@ -32,8 +34,6 @@ def test_shift_data_location_left():
     
 def test_swap_data_location():
     '''basic tests for _swap_data_location
-    TODO
-    need to test fail case (index out of bound)
     '''
     data = "12345"
     raw_data = str.encode(data)
@@ -61,8 +61,11 @@ def test_invert_data_order():
     assert encrypter._invert_data_order(raw_data, 0, 4).decode() == "54321"
     assert encrypter._invert_data_order(raw_data, 1, 3).decode() == "14325"
     assert encrypter._invert_data_order(raw_data, 4, 0).decode() == "54321"
+    assert encrypter._invert_data_order(raw_data, 0, 4, 0).decode() == "12345"
     assert encrypter._invert_data_order(raw_data, 0, 4, 2).decode() == "34125"
+    assert encrypter._invert_data_order(raw_data, 0, 4, 3).decode() == "12345"
     assert encrypter._invert_data_order(raw_data, 0, 4, 5).decode() == "12345"
     assert encrypter._invert_data_order(raw_data, 0, 4, 6).decode() == "54321"
-    assert encrypter._invert_data_order(raw_data, 0, 6, 1).decode() == "32145"
-    assert encrypter._invert_data_order(raw_data, 0, 9, 1).decode() == "21345"
+    assert encrypter._invert_data_order(raw_data, 0, 6, 1).decode() == "21345"
+    assert encrypter._invert_data_order(raw_data, 0, 9, 1).decode() == "54321"
+    assert encrypter._invert_data_order(raw_data, 9, 0, 6).decode() == "54321"
